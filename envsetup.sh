@@ -45,7 +45,7 @@ EOF
     local T=$(gettop)
     local A=""
     local i
-    for i in `cat $T/build/envsetup.sh $T/vendor/bootleggers/build/envsetup.sh | sed -n "/^[[:blank:]]*function /s/function \([a-z_]*\).*/\1/p" | sort | uniq`; do
+    for i in `cat $T/build/envsetup.sh $T/vendor/expenses/build/envsetup.sh | sed -n "/^[[:blank:]]*function /s/function \([a-z_]*\).*/\1/p" | sort | uniq`; do
       A="$A $i"
     done
     echo $A
@@ -56,8 +56,8 @@ function build_build_var_cache()
 {
     local T=$(gettop)
     # Grep out the variable names from the script.
-    cached_vars=`cat $T/build/envsetup.sh $T/vendor/bootleggers/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`
-    cached_abs_vars=`cat $T/build/envsetup.sh $T/vendor/bootleggers/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_abs_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`
+    cached_vars=`cat $T/build/envsetup.sh $T/vendor/expenses/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`
+    cached_abs_vars=`cat $T/build/envsetup.sh $T/vendor/expenses/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_abs_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`
     # Call the build system to dump the "<val>=<value>" pairs as a shell script.
     build_dicts_script=`\builtin cd $T; build/soong/soong_ui.bash --dumpvars-mode \
                         --vars="$cached_vars" \
@@ -139,13 +139,13 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
-    if (echo -n $1 | grep -q -e "^bootleg_") ; then
-        BOOTLEGGERS_BUILD=$(echo -n $1 | sed -e 's/^bootleg_//g')
-        export BUILD_NUMBER=$( (date +%s%N ; echo $BOOTLEGGERS_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
+    if (echo -n $1 | grep -q -e "^expenses_") ; then
+        EXPENSES-OS_BUILD=$(echo -n $1 | sed -e 's/^expenses_//g')
+        export BUILD_NUMBER=$( (date +%s%N ; echo $EXPENSES-OS_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
     else
-        BOOTLEGGERS_BUILD=
+        EXPENSES-OS_BUILD=
     fi
-    export BOOTLEGGERS_BUILD
+    export EXPENSES-OS_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
@@ -622,10 +622,10 @@ function breakfast()
 {
     target=$1
     local variant=$2
-    BOOTLEGGERS_DEVICES_ONLY="true"
+    EXPENSES-OS_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
-    for f in `/bin/ls vendor/bootleggers/vendorsetup.sh 2> /dev/null`
+    for f in `/bin/ls vendor/expenses/vendorsetup.sh 2> /dev/null`
         do
             echo "including $f"
             . $f
@@ -641,11 +641,11 @@ function breakfast()
             # A buildtype was specified, assume a full device name
             lunch $target
         else
-            # This is probably just the Bootleggers model name
+            # This is probably just the Expenses model name
             if [ -z "$variant" ]; then
                 variant="userdebug"
             fi
-            lunch bootleg_$target-$variant
+            lunch expenses_$target-$variant
         fi
     fi
     return $?
@@ -1790,4 +1790,4 @@ addcompletions
 
 export ANDROID_BUILD_TOP=$(gettop)
 
-. $ANDROID_BUILD_TOP/vendor/bootleggers/build/envsetup.sh
+. $ANDROID_BUILD_TOP/vendor/expenses/build/envsetup.sh
