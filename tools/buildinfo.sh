@@ -64,6 +64,14 @@ if [ -n "$DEVICE_MAINTAINERS" ] ; then
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
-echo "ro.expenses.device=$EXPENSES-OS_DEVICE"
+echo "ro.expenses.device=$EXPENSES_DEVICE"
 
 echo "# end build properties"
+
+# EXPENSES Build Info generator
+cat >> $OUT/$PRODUCT_NAME.cbi << EOF
+EXPENSES P $PRODUCT_NAME
+DEVICE=$PRODUCT_NAME
+MAINTAINER=$USER
+FULL_DEVICE_NAME=$PRODUCT_BRAND $PRODUCT_MODEL
+EOF
