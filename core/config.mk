@@ -230,7 +230,7 @@ $(call project-set-path-variant,recovery,RECOVERY_VARIANT,bootable/recovery)
 $(call project-set-path-variant,ril,TARGET_RIL_VARIANT,hardware/ril)
 
 -include vendor/extra/BoardConfigExtra.mk
--include vendor/bootleggers/config/BoardConfigBootleggers.mk
+-include vendor/expenses/config/BoardConfigexpenses.mk
 
 # The build system exposes several variables for where to find the kernel
 # headers:
@@ -1095,13 +1095,13 @@ include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
 endif
 
-ifneq ($(BOOTLEGGERS_BUILD),)
+ifneq ($(EXPENSES-OS_BUILD),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-$(eval include device/bootleg/sepolicy/common/sepolicy.mk)
+$(eval include device/expenses/sepolicy/common/sepolicy.mk)
 
 # Include any vendor specific config.mk file
-include $(TOPDIR)vendor/bootleggers/build/core/config.mk
+include $(TOPDIR)vendor/expenses/build/core/config.mk
 
 endif
 
