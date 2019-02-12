@@ -140,12 +140,12 @@ function check_product()
         return
     fi
     if (echo -n $1 | grep -q -e "^expenses_") ; then
-        EXPENSES-OS_BUILD=$(echo -n $1 | sed -e 's/^expenses_//g')
-        export BUILD_NUMBER=$( (date +%s%N ; echo $EXPENSES-OS_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
+        EXPENSES_BUILD=$(echo -n $1 | sed -e 's/^expenses_//g')
+        export BUILD_NUMBER=$( (date +%s%N ; echo $EXPENSES_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
     else
-        EXPENSES-OS_BUILD=
+        EXPENSES_BUILD=
     fi
-    export EXPENSES-OS_BUILD
+    export EXPENSES_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
@@ -622,7 +622,7 @@ function breakfast()
 {
     target=$1
     local variant=$2
-    EXPENSES-OS_DEVICES_ONLY="true"
+    EXPENSES_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
     for f in `/bin/ls vendor/expenses/vendorsetup.sh 2> /dev/null`
